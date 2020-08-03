@@ -38,6 +38,7 @@ fibonacci_cache: List[int] = []
 
 def dynamic_fibonacci(n: int) -> int:
     global fibonacci_cache
+    print(n)
     if type(n) != int or n < 1:
         raise ValueError("수열의 항 번호는 자연수여야 합니다!")
 
@@ -53,12 +54,16 @@ def dynamic_fibonacci(n: int) -> int:
         return 1
 
     # 캐시에 이미 피보나치 수열의 값이 저장되어 있을 경우, 그 값을 바로 이용한다.
-    if fibonacci_cache[n] != -1:
-        return fibonacci_cache[n]
+    # 프로그래밍을 공부하지 않은 사람들을 위한 추가정보 :
+    # 프로그래밍 언어에서, 길이 n의 리스트의 인덱스는 0부터 시작해서 n-1로 끝난다.
+    # 구하고자 하는 항이 5번째 항이라면, 캐시 역할을 하는 리스트에서는 4번 인덱스의 값에 대응한다.
+    if fibonacci_cache[n-1] != -1:
+        return fibonacci_cache[n-1]
 
     # [ 귀납적 정의 ] a_n = a_(n-1) + a_(n-2) (n = 3 이상의 자연수)
     # 캐시에 피보나치 수열의 값이 존재하지 않을 경우, 최초의 1회에 안해 연산을 수행한다.
-    fibonacci_cache[n] = dynamic_fibonacci(n - 1) + dynamic_fibonacci(n - 2)
+    fibonacci_cache[n-1] = dynamic_fibonacci(n - 1) + dynamic_fibonacci(n - 2)
+    print(fibonacci_cache)
     return fibonacci_cache[n]
 
 
@@ -69,7 +74,7 @@ def task(fibonacci_solver: Callable[[int], int], n: int):
     :param n: 구하고자 하는 피보나치 수열의 항 번호입니다.
     :return: 피보나치 수열의 n번째 항의 값을 반환합니다.
     """
-    print("피보나치 수열의 ㅖ{")
+    print(f"피보나치 수열의 {n}번째 항을 계산합니다.")
     start = time()
     result = fibonacci_solver(n)
     print(result)
@@ -78,6 +83,6 @@ def task(fibonacci_solver: Callable[[int], int], n: int):
 
 
 print("동적 계획법 방식의 피보나치 수열 풀이")
-task(fibonacci_solver=dynamic_fibonacci, n=40)
+task(fibonacci_solver=dynamic_fibonacci, n=20)
 print("재귀함수 방식의 피보나치 수열 풀이")
-task(fibonacci_solver=recursive_fibonacci, n=40)
+task(fibonacci_solver=recursive_fibonacci, n=20)
