@@ -18,8 +18,13 @@ a_n = a_(n-1) + a_(n-2) (n = 3 이상의 자연수)
 """
 
 
-# 1. 재귀함수 이용
+# 1. 재귀호출 사용
 def recursive_fibonacci(n: int) -> int:
+    """
+    재귀호출 방식으로 피보나치 수열의 n번째 항을 탐색합니다.
+    :param n: 구하고자 하는 피보나치 수열의 항 번호입니다.
+    :return: 피보나치 수열의 n 번째 항의 값을 반환합니다.
+    """
     if type(n) != int or n < 1:
         raise ValueError("수열의 항 번호는 자연수여야 합니다!")
 
@@ -32,13 +37,19 @@ def recursive_fibonacci(n: int) -> int:
     return recursive_fibonacci(n - 1) + recursive_fibonacci(n - 2)
 
 
+recursive_fibonacci.__qualname__ = "재귀함수 방식"
+
 # 2. 동적계획법 사용
 fibonacci_cache: List[int] = []
 
 
 def dynamic_fibonacci(n: int) -> int:
+    """
+    동적 계획법 방식으로 피보나치 수열의 n번째 항을 탐색합니다.
+    :param n: 구하고자 하는 피보나치 수열의 항 번호입니다.
+    :return: 피보나치 수열의 n 번째 항의 값을 반환합니다.
+    """
     global fibonacci_cache
-    print(n)
     if type(n) != int or n < 1:
         raise ValueError("수열의 항 번호는 자연수여야 합니다!")
 
@@ -63,26 +74,39 @@ def dynamic_fibonacci(n: int) -> int:
     # [ 귀납적 정의 ] a_n = a_(n-1) + a_(n-2) (n = 3 이상의 자연수)
     # 캐시에 피보나치 수열의 값이 존재하지 않을 경우, 최초의 1회에 안해 연산을 수행한다.
     fibonacci_cache[n-1] = dynamic_fibonacci(n - 1) + dynamic_fibonacci(n - 2)
-    print(fibonacci_cache)
-    return fibonacci_cache[n]
+    return fibonacci_cache[n-1]
 
 
-def task(fibonacci_solver: Callable[[int], int], n: int):
+dynamic_fibonacci.__qualname__ = "동적 계획법 방식"
+
+
+# 계산 수행용 함수
+def task(fibonacci_solver: Callable[[int], int], n: int) -> float:
     """
     주어진 solver를 사용해 피보나치 수열의 n번째 항을 계산합니다.
     :param fibonacci_solver: 피보나치 수열을 해결하기 위한 알고리즘을 가진 Callable한 객체입니다.
     :param n: 구하고자 하는 피보나치 수열의 항 번호입니다.
-    :return: 피보나치 수열의 n번째 항의 값을 반환합니다.
+    :return: 피보나치 수열의 n번째 항을 계산하는데에 소요된 시간을 반환합니다.
     """
-    print(f"피보나치 수열의 {n}번째 항을 계산합니다.")
+    task_name: str = fibonacci_solver.__qualname__ if fibonacci_solver.__qualname__ is not None else "UNKNOWN TASK"
     start = time()
     result = fibonacci_solver(n)
-    print(result)
+    print(f"[{task_name}] 피보나치 수열의 {n}번째 항 : {result}")
     end = time()
-    print(f"{end - start}초 경과")
+    duration = end - start
+    print(f"[{task_name}] 소요시간 : {duration}초")
+    return duration
 
 
-print("동적 계획법 방식의 피보나치 수열 풀이")
-task(fibonacci_solver=dynamic_fibonacci, n=20)
-print("재귀함수 방식의 피보나치 수열 풀이")
-task(fibonacci_solver=recursive_fibonacci, n=20)
+# 동적 계획법 방식과 재귀함수 방식의 속도 비교
+print("[task] 동적 계획법 방식의 피보나치 수열 풀이")
+duration_dynamic = task(fibonacci_solver=dynamic_fibonacci, n=20)
+print("[task] 재귀함수 방식의 피보나치 수열 풀이")
+duration_recursive = task(fibonacci_solver=recursive_fibonacci, n=20)
+
+if duration_dynamic < duration_recursive:
+    print("[방식비교] 동적 계획법 방식이 더 빨랐습니다!")
+elif duration_dynamic > duration_recursive:
+    print("[방식비교] 재귀함수 방식이 더 빨랐습니다!")
+else:
+    print("[방식비교] 두 방식 모두 동등한 결과를 보여주었습니다!")
