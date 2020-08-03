@@ -51,7 +51,7 @@ def task(fibonacci_solver: Callable[[int], int], n: int):
     :param n: target index of fibonacci sqeuence
     :return: target
     """
-    print("피보나치 수열의 ㅖ{")
+    print(f"피보나치 수열의 {n} 번째 항을 계산합니다.")
     start = time()
     result = fibonacci_solver(n)
     print(result)
