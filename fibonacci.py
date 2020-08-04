@@ -98,15 +98,27 @@ def task(fibonacci_solver: Callable[[int], int], n: int) -> float:
     return duration
 
 
-# 동적 계획법 방식과 재귀함수 방식의 속도 비교
-print("[task] 동적 계획법 방식의 피보나치 수열 풀이")
-duration_dynamic = task(fibonacci_solver=dynamic_fibonacci, n=20)
-print("[task] 재귀함수 방식의 피보나치 수열 풀이")
-duration_recursive = task(fibonacci_solver=recursive_fibonacci, n=20)
+def main():
+    # 탐색할 피보나치 수열의 항 번호 입력받기
+    n = input("탐색할 피보나치 수열의 항 번호를 입력해 주세요 > ")
+    if not n.isdigit():
+        raise ValueError("수열의 항 번호는 숫자여야 합니다.")
+    n = int(n)
+    if n < 1:
+        raise ValueError("수열의 항 번호는 자연수여야 합니다.")
 
-if duration_dynamic < duration_recursive:
-    print("[방식비교] 동적 계획법 방식이 더 빨랐습니다!")
-elif duration_dynamic > duration_recursive:
-    print("[방식비교] 재귀함수 방식이 더 빨랐습니다!")
-else:
-    print("[방식비교] 두 방식 모두 동등한 결과를 보여주었습니다!")
+    # 동적 계획법 방식과 재귀함수 방식의 속도 비교
+    print("[task] 동적 계획법 방식의 피보나치 수열 풀이")
+    duration_dynamic = task(fibonacci_solver=dynamic_fibonacci, n=n)
+    print("[task] 재귀함수 방식의 피보나치 수열 풀이")
+    duration_recursive = task(fibonacci_solver=recursive_fibonacci, n=n)
+
+    if duration_dynamic < duration_recursive:
+        print("[방식비교] 동적 계획법 방식이 더 빨랐습니다!")
+    elif duration_dynamic > duration_recursive:
+        print("[방식비교] 재귀함수 방식이 더 빨랐습니다!")
+    else:
+        print("[방식비교] 두 방식 모두 동등한 결과를 보여주었습니다!")
+
+
+main()
